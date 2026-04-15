@@ -30,9 +30,9 @@ canvas{position:absolute;top:0;left:0;width:100%;height:100%}
 .ctrl-btn{background:none;border:1px solid rgba(180,140,255,0.25);color:rgba(212,197,240,0.7);font-family:'Cormorant Garamond',serif;font-size:0.85rem;padding:0.4em 1.2em;border-radius:20px;cursor:pointer;letter-spacing:0.1em;transition:all 0.3s}
 .ctrl-btn:hover{border-color:rgba(180,140,255,0.5);color:#d4c5f0}
 .ctrl-btn.active{background:rgba(180,140,255,0.15);border-color:rgba(180,140,255,0.5)}
-#volSlider{-webkit-appearance:none;width:80px;height:2px;background:rgba(180,140,255,0.3);border-radius:2px;outline:none}
-#volSlider::-webkit-slider-thumb{-webkit-appearance:none;width:12px;height:12px;border-radius:50%;background:rgba(212,197,240,0.7);cursor:pointer}
-#volLabel{font-size:0.75rem;color:rgba(180,160,220,0.5);letter-spacing:0.1em;display:flex;align-items:center;gap:8px}
+#volSlider,#restartSlider{-webkit-appearance:none;width:80px;height:2px;background:rgba(180,140,255,0.3);border-radius:2px;outline:none}
+#volSlider::-webkit-slider-thumb,#restartSlider::-webkit-slider-thumb{-webkit-appearance:none;width:12px;height:12px;border-radius:50%;background:rgba(212,197,240,0.7);cursor:pointer}
+#volLabel,#restartLabel{font-size:0.75rem;color:rgba(180,160,220,0.5);letter-spacing:0.1em;display:flex;align-items:center;gap:8px}
 #dimOverlay{position:absolute;inset:0;background:#0a0612;opacity:0;z-index:5;pointer-events:none;transition:opacity 3s ease}
 #loadingMsg{position:absolute;bottom:8%;left:50%;transform:translateX(-50%);z-index:15;color:rgba(180,160,220,0.5);font-size:0.85rem;font-style:italic;letter-spacing:0.1em;opacity:0;transition:opacity 1s}
 #loadingMsg.visible{opacity:1}
@@ -58,6 +58,9 @@ canvas{position:absolute;top:0;left:0;width:100%;height:100%}
       <button class="ctrl-btn" id="pauseBtn">Pause</button>
       <label id="volLabel">Volume
         <input type="range" id="volSlider" min="0" max="100" value="70">
+      </label>
+      <label id="restartLabel">Restart
+        <input type="range" id="restartSlider" min="0" max="100" value="0">
       </label>
     </div>
   </div>
@@ -497,6 +500,18 @@ document.getElementById('pauseBtn').addEventListener('click', () => session.togg
 
 document.getElementById('volSlider').addEventListener('input', (e) => {
   audio.setVolume(e.target.value / 100);
+});
+
+document.getElementById('restartSlider').addEventListener('input', (e) => {
+  const position = parseInt(e.target.value);
+  if (position === 0) {
+    // Reset to beginning
+    audio.currentLine = 0;
+    audio.stop();
+    session.reset();
+    session.start();
+    e.target.value = 0; // Reset slider
+  }
 });
 </script>
 </body>
