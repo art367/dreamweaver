@@ -63,60 +63,67 @@ canvas{position:absolute;top:0;left:0;width:100%;height:100%}
   </div>
 </div>
 <script>
+// Line 0 = "Welcome to Dreamweaver" (intro)
+// Lines 1-38 = guided script
 const LINES = [
-  "Close your eyes... ... and take a slow... deep breath in.",
-  "Hold it gently... ... and now... release... letting everything... go.",
-  "You\'re safe here... ... There is nothing to do... ... nowhere to be... ... just this moment.",
-  "Let the weight of the day... dissolve... ... like mist... fading in warm light.",
-  "With each breath... ... you\'re sinking... a little deeper... into softness.",
-  "Now bring your attention... to your forehead... ... Feel it... smooth... and open.",
-  "Let your eyes grow heavy... ... so heavy... ... like velvet curtains... closing.",
-  "Your jaw softens... ... your lips part gently... ... all the tension... melting away.",
-  "Feel a warm wave... of relaxation... flowing down through your neck... ... your shoulders... dropping... releasing.",
-  "Your arms grow heavy... and warm... ... your hands... open and soft... ... fingers gently... uncurling.",
-  "This warmth spreads... through your chest... ... your belly softens... ... each breath... draws you deeper.",
-  "Down through your hips... ... your legs growing heavy... ... pleasantly heavy... ... sinking into the bed.",
-  "All the way down... to your toes... ... a gentle tingling... ... as every last bit of tension... dissolves.",
-  "Now imagine... you\'re standing... at the top of a beautiful staircase... ... made of moonlight.",
-  "With each step down... ... you drift... twice as deep... into perfect relaxation.",
-  "Ten... ... stepping down... ... deeper... and deeper.",
-  "Nine... ... the air is soft... and warm... around you.",
-  "Eight... ... every muscle... letting go... completely.",
-  "Seven... ... you\'re floating now... ... weightless... and free.",
-  "Six... ... the world above... grows quiet... and distant.",
-  "Five... ... halfway down... ... so deeply... relaxed.",
-  "Four... ... a beautiful peace... washing over you.",
-  "Three... ... almost there... ... drifting... ... floating.",
-  "Two... ... so deep... ... so calm... ... so safe.",
-  "One... ... you\'ve arrived... ... in the most peaceful place... you\'ve ever known.",
-  "You find yourself... in an enchanted garden... ... bathed in soft... violet moonlight.",
-  "Fireflies drift lazily... around you... ... their light pulsing... in rhythm with your heartbeat.",
-  "A gentle stream... whispers nearby... ... its melody... ancient... and familiar.",
-  "The air smells... of lavender... and night jasmine... ... every breath... fills you with calm.",
-  "Soft moss beneath you... ... cradling you... ... as if the earth itself... is holding you.",
-  "The stars above... swirl slowly... ... like a great cosmic lullaby... just for you.",
-  "You are so deeply relaxed now... ... there\'s nothing left... to think about.",
-  "My voice is becoming softer... ... more distant... ... like a whisper... on the wind.",
-  "You don\'t need to listen... anymore... ... just let the sounds... wash over you.",
-  "Drifting... ... floating... ... dissolving... into warmth.",
-  "Sleep is here... ... welcoming you... ... wrapping around you... like silk.",
-  "Let go now... ... completely... ... you are safe... ... you are loved... ... you are home.",
+  "Welcome… to Dreamweaver…",
+  "Close your eyes… and take a slow… deep breath in.",
+  "Hold it gently… and now… release… letting everything… go.",
+  "You're safe here… There is nothing to do… nowhere to be… just this moment.",
+  "Let the weight of the day… dissolve… like mist… fading in warm light.",
+  "With each breath… you're sinking… a little deeper… into softness.",
+  "Now bring your attention… to your forehead… Feel it… smooth… and open.",
+  "Let your eyes grow heavy… so heavy… like velvet curtains… closing.",
+  "Your jaw softens… your lips part gently… all the tension… melting away.",
+  "Feel a warm wave… of relaxation… flowing down through your neck… your shoulders… dropping… releasing.",
+  "Your arms grow heavy… and warm… your hands… open and soft… fingers gently… uncurling.",
+  "This warmth spreads… through your chest… your belly softens… each breath… draws you deeper.",
+  "Down through your hips… your legs growing heavy… pleasantly heavy… sinking into the bed.",
+  "All the way down… to your toes… a gentle tingling… as every last bit of tension… dissolves.",
+  "Now imagine… you're standing… at the top of a beautiful staircase… made of moonlight.",
+  "With each step down… you drift… twice as deep… into perfect relaxation.",
+  "Ten… stepping down… deeper… and deeper.",
+  "Nine… the air is soft… and warm… around you.",
+  "Eight… every muscle… letting go… completely.",
+  "Seven… you're floating now… weightless… and free.",
+  "Six… the world above… grows quiet… and distant.",
+  "Five… halfway down… so deeply… relaxed.",
+  "Four… a beautiful peace… washing over you.",
+  "Three… almost there… drifting… floating.",
+  "Two… so deep… so calm… so safe.",
+  "One… you've arrived… in the most peaceful place… you've ever known.",
+  "You find yourself… in an enchanted garden… bathed in soft… violet moonlight.",
+  "Fireflies drift lazily… around you… their light pulsing… in rhythm with your heartbeat.",
+  "A gentle stream… whispers nearby… its melody… ancient… and familiar.",
+  "The air smells… of lavender… and night jasmine… every breath… fills you with calm.",
+  "Soft moss beneath you… cradling you… as if the earth itself… is holding you.",
+  "The stars above… swirl slowly… like a great cosmic lullaby… just for you.",
+  "You are so deeply relaxed now… there's nothing left… to think about.",
+  "My voice is becoming softer… more distant… like a whisper… on the wind.",
+  "You don't need to listen… anymore… just let the sounds… wash over you.",
+  "Drifting… floating… dissolving… into warmth.",
+  "Sleep is here… welcoming you… wrapping around you… like silk.",
+  "Let go now… completely… you are safe… you are loved… you are home.",
   "Sleep."
 ];
 
 // Phase definitions: [startLine, endLine, pauseBetweenLines(ms)]
-// 0-12: Body scan relaxation (13 lines) - 5s gaps
-// 13-14: Staircase intro (2 lines) - 6s gaps
-// 15-24: Countdown Ten to One (10 lines) - 7s gaps
-// 25-30: Enchanted garden (6 lines) - 8s gaps
-// 31-37: Fade to sleep (7 lines) - 10s gaps
+// 0: Welcome intro (1 line) - 4s pause after
+// 1-13: Body scan relaxation (13 lines) - 5s gaps
+// 14-15: Staircase intro (2 lines) - 6s gaps
+// 16-25: Countdown Ten to One (10 lines) - 7s gaps
+// 26-31: Enchanted garden (6 lines) - 8s gaps
+// 32-38: Fade to sleep (7 lines) - 10s gaps
 const PHASES = [
-  [0, 12, 5000],
-  [13, 14, 6000],
-  [15, 24, 7000],
-  [25, 30, 8000],
-  [31, 37, 10000]
+  [0, 0, 4000],
+  [1, 13, 5000],
+  [14, 15, 6000],
+  [16, 25, 7000],
+  [26, 31, 8000],
+  [32, 38, 10000]
 ];
+
+const TOTAL_LINES = 39;
 
 // ==================== AUDIO ENGINE ====================
 class AudioEngine {
@@ -127,9 +134,11 @@ class AudioEngine {
     this.voiceGain = null;
     this.volume = 0.7;
     this.paused = false;
-    this.currentAudio = null;
+    this.audioBuffers = new Array(TOTAL_LINES).fill(null);
+    this.ambientBuffer = null;
+    this.ambientSource = null;
+    this.currentSource = null;
     this._pendingResolve = null;
-    this._sourceNodes = [];
   }
 
   init() {
@@ -147,87 +156,40 @@ class AudioEngine {
     this.voiceGain.connect(this.masterGain);
   }
 
-  createNoiseBuffer(seconds) {
-    const sr = this.ctx.sampleRate;
-    const len = sr * seconds;
-    const buf = this.ctx.createBuffer(2, len, sr);
-    for (let ch = 0; ch < 2; ch++) {
-      const data = buf.getChannelData(ch);
-      for (let i = 0; i < len; i++) data[i] = Math.random() * 2 - 1;
+  async loadAudio(url) {
+    const response = await fetch(url);
+    const arrayBuffer = await response.arrayBuffer();
+    return await this.ctx.decodeAudioData(arrayBuffer);
+  }
+
+  async preloadLine(index) {
+    if (this.audioBuffers[index]) return;
+    const num = String(index).padStart(2, '0');
+    try {
+      this.audioBuffers[index] = await this.loadAudio('audio/line_' + num + '.mp3');
+    } catch(e) {
+      console.warn('Failed to preload line', index, e);
     }
-    return buf;
+  }
+
+  async preloadAmbient() {
+    try {
+      this.ambientBuffer = await this.loadAudio('audio/ambient.mp3');
+    } catch(e) {
+      console.warn('Failed to load ambient', e);
+    }
   }
 
   startAmbient() {
-    const noiseBuf = this.createNoiseBuffer(4);
-
-    // Rain: high bandpass filtered white noise
-    const rain = this.ctx.createBufferSource();
-    rain.buffer = noiseBuf;
-    rain.loop = true;
-    const rainFilt = this.ctx.createBiquadFilter();
-    rainFilt.type = 'bandpass';
-    rainFilt.frequency.value = 8000;
-    rainFilt.Q.value = 0.5;
-    const rainG = this.ctx.createGain();
-    rainG.gain.value = 0.12;
-    rain.connect(rainFilt);
-    rainFilt.connect(rainG);
-    rainG.connect(this.ambientGain);
-    rain.start();
-
-    // Stream: brown noise low-passed
-    const brownBuf = this.ctx.createBuffer(2, this.ctx.sampleRate * 4, this.ctx.sampleRate);
-    for (let ch = 0; ch < 2; ch++) {
-      const d = brownBuf.getChannelData(ch);
-      let last = 0;
-      for (let i = 0; i < d.length; i++) {
-        d[i] = (last + 0.02 * (Math.random()*2-1)) / 1.02;
-        last = d[i];
-      }
-      let mx = 0;
-      for (let i = 0; i < d.length; i++) mx = Math.max(mx, Math.abs(d[i]));
-      if (mx > 0) for (let i = 0; i < d.length; i++) d[i] /= mx;
-    }
-    const stream = this.ctx.createBufferSource();
-    stream.buffer = brownBuf;
-    stream.loop = true;
-    const streamFilt = this.ctx.createBiquadFilter();
-    streamFilt.type = 'lowpass';
-    streamFilt.frequency.value = 600;
-    const streamG = this.ctx.createGain();
-    streamG.gain.value = 0.15;
-    stream.connect(streamFilt);
-    streamFilt.connect(streamG);
-    streamG.connect(this.ambientGain);
-    stream.start();
-
-    // Wind: bandpass with slow LFO swell
-    const wind = this.ctx.createBufferSource();
-    wind.buffer = noiseBuf;
-    wind.loop = true;
-    const windFilt = this.ctx.createBiquadFilter();
-    windFilt.type = 'bandpass';
-    windFilt.frequency.value = 400;
-    windFilt.Q.value = 1.5;
-    const windG = this.ctx.createGain();
-    windG.gain.value = 0.08;
-    const lfo = this.ctx.createOscillator();
-    const lfoG = this.ctx.createGain();
-    lfo.frequency.value = 0.08;
-    lfo.type = 'sine';
-    lfoG.gain.value = 0.04;
-    lfo.connect(lfoG);
-    lfoG.connect(windG.gain);
-    lfo.start();
-    wind.connect(windFilt);
-    windFilt.connect(windG);
-    windG.connect(this.ambientGain);
-    wind.start();
-
-    // Fade ambient in over 5s
+    if (!this.ambientBuffer) return;
+    this.ambientSource = this.ctx.createBufferSource();
+    this.ambientSource.buffer = this.ambientBuffer;
+    this.ambientSource.loop = true;
+    this.ambientSource.connect(this.ambientGain);
+    this.ambientSource.start();
+    // Fade in over 5s
     this.ambientGain.gain.setValueAtTime(0, this.ctx.currentTime);
-    this.ambientGain.gain.linearRampToValueAtTime(1.0, this.ctx.currentTime + 5);
+    this.ambientGain.gain.linearRampToValueAtTime(0.4, this.ctx.currentTime + 5);
   }
 
   setVolume(v) {
@@ -236,36 +198,53 @@ class AudioEngine {
   }
 
   playLine(lineIndex) {
-    return new Promise((resolve, reject) => {
-      const num = String(lineIndex).padStart(2, '0');
-      const audio = new Audio('audio/line_' + num + '.mp3');
-      this.currentAudio = audio;
+    return new Promise(async (resolve) => {
+      // Ensure line is loaded
+      if (!this.audioBuffers[lineIndex]) {
+        await this.preloadLine(lineIndex);
+      }
+      const buffer = this.audioBuffers[lineIndex];
+      if (!buffer) { resolve(); return; }
 
-      const source = this.ctx.createMediaElementSource(audio);
+      // Duck ambient slightly during voice
+      if (this.ambientGain) {
+        this.ambientGain.gain.linearRampToValueAtTime(0.2, this.ctx.currentTime + 0.5);
+      }
+
+      const source = this.ctx.createBufferSource();
+      source.buffer = buffer;
       source.connect(this.voiceGain);
-      this._sourceNodes.push(source);
+      this.currentSource = source;
 
-      audio.onended = () => { this.currentAudio = null; resolve(); };
-      audio.onerror = (e) => { this.currentAudio = null; resolve(); }; // Resolve anyway to continue
+      source.onended = () => {
+        this.currentSource = null;
+        // Restore ambient
+        if (this.ambientGain) {
+          this.ambientGain.gain.linearRampToValueAtTime(0.4, this.ctx.currentTime + 1);
+        }
+        resolve();
+      };
 
       if (this.paused) {
-        this._pendingResolve = () => { audio.play().catch(() => resolve()); };
+        this._pendingResolve = () => { source.start(); };
       } else {
-        audio.play().catch(() => resolve());
+        source.start();
       }
+
+      // Preload next 2 lines
+      if (lineIndex + 1 < TOTAL_LINES) this.preloadLine(lineIndex + 1);
+      if (lineIndex + 2 < TOTAL_LINES) this.preloadLine(lineIndex + 2);
     });
   }
 
   pause() {
     this.paused = true;
-    if (this.currentAudio) this.currentAudio.pause();
     if (this.ctx && this.ctx.state === 'running') this.ctx.suspend();
   }
 
   resume() {
     this.paused = false;
     if (this.ctx && this.ctx.state === 'suspended') this.ctx.resume();
-    if (this.currentAudio && this.currentAudio.paused) this.currentAudio.play();
     if (this._pendingResolve) { this._pendingResolve(); this._pendingResolve = null; }
   }
 }
@@ -344,7 +323,6 @@ class VisualEngine {
     const baseR = Math.min(this.w, this.h) * 0.18 * breathScale;
     const alpha = 0.15 + 0.1 * Math.sin(this.breathPhase);
 
-    // Outer glow
     const glow = ctx.createRadialGradient(cx, cy, baseR*0.3, cx, cy, baseR*1.5);
     glow.addColorStop(0, 'rgba(140,100,220,'+alpha*0.5+')');
     glow.addColorStop(1, 'rgba(140,100,220,0)');
@@ -353,7 +331,6 @@ class VisualEngine {
     ctx.arc(cx, cy, baseR*1.5, 0, Math.PI*2);
     ctx.fill();
 
-    // Rings
     for (let r = 0; r < 5; r++) {
       const ringR = baseR * (0.3 + r * 0.18);
       const petals = 6 + r * 2;
@@ -377,7 +354,6 @@ class VisualEngine {
       }
     }
 
-    // Center
     ctx.fillStyle = 'rgba(180,140,255,'+alpha*0.4+')';
     ctx.beginPath();
     ctx.arc(cx, cy, baseR*0.15, 0, Math.PI*2);
@@ -424,26 +400,41 @@ class SessionController {
   async start() {
     this.running = true;
     this.audio.init();
-    this.audio.startAmbient();
     this.visuals.init();
     this.visuals.start();
 
     // Wake lock
     try { if ('wakeLock' in navigator) await navigator.wakeLock.request('screen'); } catch(e) {}
 
-    // Preload first few audio files
     const loadMsg = document.getElementById('loadingMsg');
-    loadMsg.textContent = 'Preparing your journey...';
+    loadMsg.textContent = 'Preparing your journey…';
     loadMsg.classList.add('visible');
-    await this.sleep(3000);
+
+    // Preload ambient + first few voice lines in parallel
+    await Promise.all([
+      this.audio.preloadAmbient(),
+      this.audio.preloadLine(0),
+      this.audio.preloadLine(1),
+      this.audio.preloadLine(2),
+      this.audio.preloadLine(3),
+      this.audio.preloadLine(4)
+    ]);
+
     loadMsg.classList.remove('visible');
+
+    // Start ambient music
+    this.audio.startAmbient();
+
+    // Brief pause before voice begins
+    await this.sleep(3000);
 
     // Play through all phases
     for (let pi = 0; pi < PHASES.length && this.running; pi++) {
       const [start, end, gap] = PHASES[pi];
-      const dimTarget = pi * 0.12;
+      // Progressive dimming (skip intro phase for dim calculation)
+      const dimTarget = Math.max(0, (pi - 1)) * 0.12;
       this.visuals.setDim(dimTarget);
-      this.visuals.breathSpeed = Math.max(0.004, 0.008 - pi * 0.001);
+      this.visuals.breathSpeed = Math.max(0.004, 0.008 - Math.max(0, pi-1) * 0.001);
 
       for (let li = start; li <= end && this.running; li++) {
         // Check pause
@@ -451,17 +442,17 @@ class SessionController {
 
         // Show subtitle
         const sub = document.getElementById('subtitleText');
-        sub.textContent = LINES[li].replace(/\.\.\./g, '…');
+        sub.textContent = LINES[li];
         sub.classList.add('visible');
 
-        // Play audio
+        // Play audio line
         try { await this.audio.playLine(li); } catch(e) { console.warn('Line', li, e); }
 
-        // Keep subtitle a moment then fade
+        // Keep subtitle visible briefly then fade
         await this.sleep(1500);
         sub.classList.remove('visible');
 
-        // Gap between lines (longer = more relaxing)
+        // Gap between lines
         await this.sleep(gap);
       }
     }
@@ -470,7 +461,7 @@ class SessionController {
     this.visuals.setDim(0.75);
     document.getElementById('subtitleText').textContent = '';
     document.getElementById('subtitleText').classList.remove('visible');
-    // Ambient continues playing indefinitely
+    // Ambient continues playing indefinitely for sleep
   }
 
   sleep(ms) {
