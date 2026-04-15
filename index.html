@@ -3,687 +3,510 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>Dreamweaver — Sleep Hypnosis</title>
+<title>Dreamweaver — Guided Sleep Hypnosis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap');
 *{margin:0;padding:0;box-sizing:border-box}
-html,body{width:100%;height:100%;overflow:hidden;background:#0a0a12;font-family:'Cormorant Garamond',serif;color:#c8b8d8}
-canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0}
-#overlay{position:fixed;top:0;left:0;width:100%;height:100%;z-index:1;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none}
-#startScreen{position:fixed;top:0;left:0;width:100%;height:100%;z-index:20;display:flex;flex-direction:column;align-items:center;justify-content:center;background:radial-gradient(ellipse at 50% 50%,#12101f 0%,#0a0a12 100%);transition:opacity 2s ease;pointer-events:all}
-.app-title{font-size:clamp(2.2rem,6vw,4rem);font-weight:300;color:#d4c0e8;text-shadow:0 0 60px rgba(180,140,220,0.3),0 0 120px rgba(180,140,220,0.1);letter-spacing:0.12em;margin-bottom:0.15em}
-.app-subtitle{font-size:clamp(0.85rem,2vw,1.1rem);font-weight:300;font-style:italic;color:rgba(180,160,200,0.5);letter-spacing:0.25em;margin-bottom:2.5em}
-.start-btn{background:none;border:1px solid rgba(180,140,220,0.25);color:#c8b8d8;padding:0.9em 3em;font-size:clamp(0.95rem,2vw,1.1rem);font-family:'Cormorant Garamond',serif;letter-spacing:0.25em;cursor:pointer;border-radius:60px;transition:all 0.6s ease;pointer-events:all;text-transform:lowercase}
-.start-btn:hover{background:rgba(180,140,220,0.08);border-color:rgba(180,140,220,0.5);box-shadow:0 0 40px rgba(180,140,220,0.15);transform:scale(1.02)}
-.start-note{color:rgba(180,160,200,0.3);font-size:0.75rem;letter-spacing:0.15em;margin-top:1.8em;font-style:italic}
-#guideText{position:fixed;bottom:15%;left:50%;transform:translateX(-50%);z-index:10;text-align:center;width:85%;max-width:600px;pointer-events:none}
-#guideWords{font-size:clamp(1.05rem,2.5vw,1.4rem);font-weight:300;font-style:italic;line-height:1.9;color:rgba(200,184,216,0.75);text-shadow:0 0 30px rgba(180,140,220,0.2);opacity:0;transition:opacity 1.5s ease}
-#phaseLabel{position:fixed;top:6%;left:50%;transform:translateX(-50%);z-index:10;color:rgba(180,160,200,0.25);font-size:0.7rem;letter-spacing:0.4em;text-transform:uppercase;pointer-events:none;opacity:0;transition:opacity 1.5s ease}
-#dimmer{position:fixed;top:0;left:0;width:100%;height:100%;z-index:15;background:#0a0a12;opacity:0;pointer-events:none;transition:opacity 3s ease}
-#voiceStatus{position:fixed;top:45%;left:50%;transform:translate(-50%,-50%);z-index:25;color:rgba(180,160,200,0.5);font-size:0.8rem;letter-spacing:0.1em;font-style:italic;opacity:0;transition:opacity 0.5s ease;pointer-events:none}
-#controls{position:fixed;bottom:3%;right:4%;z-index:12;display:flex;align-items:center;gap:10px;opacity:0;transition:opacity 1s ease;pointer-events:all}
-#controls label{color:rgba(180,160,200,0.3);font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase}
-#volSlider{-webkit-appearance:none;width:80px;height:2px;background:rgba(180,140,220,0.15);border-radius:2px;outline:none;cursor:pointer}
-#volSlider::-webkit-slider-thumb{-webkit-appearance:none;width:10px;height:10px;border-radius:50%;background:rgba(180,140,220,0.5);cursor:pointer}
-#pauseBtn{background:none;border:1px solid rgba(180,140,220,0.15);color:rgba(180,160,200,0.4);padding:4px 14px;font-size:0.65rem;font-family:'Cormorant Garamond',serif;letter-spacing:0.15em;cursor:pointer;border-radius:20px;transition:all 0.3s ease;text-transform:lowercase}
-#pauseBtn:hover{border-color:rgba(180,140,220,0.4);color:rgba(180,160,200,0.7)}
+html,body{width:100%;height:100%;overflow:hidden;background:#0a0612;font-family:'Cormorant Garamond',serif}
+#app{width:100%;height:100%;position:relative}
+#startScreen{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:100;background:radial-gradient(ellipse at center,#1a1030 0%,#0a0612 70%);transition:opacity 1.5s ease}
+#startScreen.hidden{opacity:0;pointer-events:none}
+#startScreen h1{font-size:clamp(2rem,6vw,4rem);font-weight:300;color:#d4c5f0;letter-spacing:0.15em;margin-bottom:0.3em;text-shadow:0 0 40px rgba(180,140,255,0.3)}
+#startScreen p{font-size:clamp(0.9rem,2.5vw,1.2rem);color:rgba(180,160,220,0.7);font-style:italic;margin-bottom:2em;letter-spacing:0.1em}
+#startBtn{background:none;border:1px solid rgba(180,140,255,0.3);color:#d4c5f0;font-family:'Cormorant Garamond',serif;font-size:clamp(1rem,3vw,1.3rem);padding:0.8em 2.5em;border-radius:50px;cursor:pointer;letter-spacing:0.15em;transition:all 0.5s ease;backdrop-filter:blur(10px)}
+#startBtn:hover{border-color:rgba(180,140,255,0.6);background:rgba(180,140,255,0.1);box-shadow:0 0 30px rgba(180,140,255,0.2)}
+#sessionScreen{position:absolute;inset:0;opacity:0;transition:opacity 2s ease}
+#sessionScreen.active{opacity:1}
+canvas{position:absolute;top:0;left:0;width:100%;height:100%}
+#bgCanvas{z-index:1}
+#mandalaCanvas{z-index:2}
+#particleCanvas{z-index:3}
+#subtitleBox{position:absolute;bottom:15%;left:50%;transform:translateX(-50%);z-index:10;text-align:center;width:85%;max-width:600px;pointer-events:none}
+#subtitleText{font-size:clamp(1rem,3vw,1.5rem);font-weight:300;color:rgba(212,197,240,0.9);font-style:italic;line-height:1.8;letter-spacing:0.08em;text-shadow:0 0 20px rgba(140,100,200,0.4);opacity:0;transition:opacity 1.5s ease}
+#subtitleText.visible{opacity:1}
+#controls{position:absolute;bottom:3%;left:50%;transform:translateX(-50%);z-index:20;display:flex;align-items:center;gap:20px;opacity:0.6;transition:opacity 0.5s}
+#controls:hover{opacity:1}
+.ctrl-btn{background:none;border:1px solid rgba(180,140,255,0.25);color:rgba(212,197,240,0.7);font-family:'Cormorant Garamond',serif;font-size:0.85rem;padding:0.4em 1.2em;border-radius:20px;cursor:pointer;letter-spacing:0.1em;transition:all 0.3s}
+.ctrl-btn:hover{border-color:rgba(180,140,255,0.5);color:#d4c5f0}
+.ctrl-btn.active{background:rgba(180,140,255,0.15);border-color:rgba(180,140,255,0.5)}
+#volSlider{-webkit-appearance:none;width:80px;height:2px;background:rgba(180,140,255,0.3);border-radius:2px;outline:none}
+#volSlider::-webkit-slider-thumb{-webkit-appearance:none;width:12px;height:12px;border-radius:50%;background:rgba(212,197,240,0.7);cursor:pointer}
+#volLabel{font-size:0.75rem;color:rgba(180,160,220,0.5);letter-spacing:0.1em;display:flex;align-items:center;gap:8px}
+#dimOverlay{position:absolute;inset:0;background:#0a0612;opacity:0;z-index:5;pointer-events:none;transition:opacity 3s ease}
+#loadingMsg{position:absolute;bottom:8%;left:50%;transform:translateX(-50%);z-index:15;color:rgba(180,160,220,0.5);font-size:0.85rem;font-style:italic;letter-spacing:0.1em;opacity:0;transition:opacity 1s}
+#loadingMsg.visible{opacity:1}
 </style>
 </head>
 <body>
-<canvas id="c"></canvas>
-<div id="overlay"><canvas id="breathCanvas" width="300" height="300"></canvas></div>
-<div id="startScreen">
-  <div class="app-title">Dreamweaver</div>
-  <div class="app-subtitle">a guided passage into sleep</div>
-  <button class="start-btn" id="startBtn">begin</button>
-  <div class="start-note">best with headphones · darken your room</div>
-</div>
-<div id="guideText"><p id="guideWords"></p></div>
-<div id="phaseLabel"></div>
-<div id="dimmer"></div>
-<div id="voiceStatus"></div>
-<div id="controls">
-  <label>volume</label>
-  <input type="range" id="volSlider" min="0" max="100" value="70">
-  <button id="pauseBtn">pause</button>
+<div id="app">
+  <div id="startScreen">
+    <h1>Dreamweaver</h1>
+    <p>a guided journey into sleep</p>
+    <button id="startBtn">Begin</button>
+  </div>
+  <div id="sessionScreen">
+    <canvas id="bgCanvas"></canvas>
+    <canvas id="mandalaCanvas"></canvas>
+    <canvas id="particleCanvas"></canvas>
+    <div id="dimOverlay"></div>
+    <div id="subtitleBox">
+      <div id="subtitleText"></div>
+    </div>
+    <div id="loadingMsg"></div>
+    <div id="controls">
+      <button class="ctrl-btn" id="pauseBtn">Pause</button>
+      <label id="volLabel">Volume
+        <input type="range" id="volSlider" min="0" max="100" value="70">
+      </label>
+    </div>
+  </div>
 </div>
 <script>
-// ═══════════════════════════════════════════════
-// DREAMWEAVER — Guided Sleep Hypnosis v2
-// ═══════════════════════════════════════════════
-const canvas = document.getElementById('c');
-const ctx = canvas.getContext('2d');
-const breathCanvas = document.getElementById('breathCanvas');
-const breathCtx = breathCanvas.getContext('2d');
-let W, H;
-function resize() {
-  W = canvas.width = window.innerWidth;
-  H = canvas.height = window.innerHeight;
-  const bSize = Math.min(300, Math.min(W, H) * 0.45);
-  breathCanvas.width = bSize; breathCanvas.height = bSize;
-}
-resize(); window.addEventListener('resize', resize);
-function lerp(a,b,t){return a+(b-a)*t}
-function rand(a,b){return Math.random()*(b-a)+a}
-function easeInOut(t){return t<0.5?2*t*t:-1+(4-2*t)*t}
-
-// ═══════════════════════════════════════════════
-// SPEECH SYNTHESIS — Robust Female Voice
-// ═══════════════════════════════════════════════
-const synth = window.speechSynthesis;
-let chosenVoice = null;
-let voiceLoaded = false;
-let speakQueue = [];
-let isSpeaking = false;
-let isPaused = false;
-
-// We try hard to find a good female English voice
-function pickVoice() {
-  const all = synth.getVoices();
-  if (!all.length) return null;
-  const en = all.filter(v => v.lang.startsWith('en'));
-
-  // Tier 1: known good female names
-  const tier1 = ['Samantha','Karen','Moira','Fiona','Tessa','Serena',
-    'Victoria','Martha','Shelley','Catherine','Zira','Hazel',
-    'Google UK English Female','Jenny','Aria','Sara','Salli','Joanna','Kendra','Kimberly','Amy','Emma','Danielle'];
-  for (const name of tier1) {
-    const v = en.find(x => x.name.toLowerCase().includes(name.toLowerCase()));
-    if (v) return v;
-  }
-  // Tier 2: any English voice with 'female' in name
-  const fem = en.find(v => /female/i.test(v.name));
-  if (fem) return fem;
-  // Tier 3: any English voice
-  if (en.length) return en[0];
-  // Last resort
-  return all[0];
-}
-
-function loadVoices() {
-  const v = pickVoice();
-  if (v) {
-    chosenVoice = v;
-    voiceLoaded = true;
-    console.log('Voice selected:', v.name, v.lang);
-  }
-}
-
-// Voices load async in most browsers
-synth.onvoiceschanged = loadVoices;
-loadVoices(); // try immediately too
-
-// Chrome/Edge bug: speech stops after ~15s. Fix: pause+resume periodically.
-let keepAliveId = null;
-function startKeepAlive() {
-  if (keepAliveId) return;
-  keepAliveId = setInterval(() => {
-    if (synth.speaking && !synth.paused) {
-      synth.pause(); synth.resume();
-    }
-  }, 5000);
-}
-
-// Core speak function — queues lines and plays them serially
-function speakLine(text, rate, onDone) {
-  // Cancel anything lingering
-  synth.cancel();
-
-  // Re-check voices (some browsers need this after cancel)
-  if (!voiceLoaded) loadVoices();
-
-  const utter = new SpeechSynthesisUtterance(text);
-  if (chosenVoice) utter.voice = chosenVoice;
-  utter.lang = 'en-US';
-  utter.rate = rate || 0.82;
-  utter.pitch = 1.0;
-  utter.volume = 1.0;
-
-  isSpeaking = true;
-
-  utter.onend = () => {
-    isSpeaking = false;
-    if (onDone) onDone();
-  };
-  utter.onerror = (e) => {
-    console.warn('Speech error:', e.error);
-    isSpeaking = false;
-    if (onDone) onDone();
-  };
-
-  // Small delay to ensure cancel() has cleared
-  setTimeout(() => {
-    synth.speak(utter);
-    startKeepAlive();
-  }, 100);
-}
-
-// Warm up speech engine with a silent utterance (required on some mobile browsers)
-function warmUpSpeech() {
-  const warm = new SpeechSynthesisUtterance('');
-  warm.volume = 0;
-  warm.rate = 2;
-  if (chosenVoice) warm.voice = chosenVoice;
-  synth.speak(warm);
-}
-
-
-// ═══════════════════════════════════════════════
-// AMBIENT SOUNDSCAPE — Rain, Water, Wind, Chimes
-// No drones. Pure nature.
-// ═══════════════════════════════════════════════
-let audioCtx, masterGain;
-let audioReady = false;
-
-function initAudio() {
-  if (audioReady) return;
-  audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  masterGain = audioCtx.createGain();
-  masterGain.gain.value = 0;
-  masterGain.connect(audioCtx.destination);
-  audioReady = true;
-
-  createRain();
-  createWater();
-  createWind();
-  scheduleChime();
-
-  // Gentle fade in
-  masterGain.gain.setTargetAtTime(0.55, audioCtx.currentTime, 3);
-}
-
-// ── Soft Rain ──
-function createRain() {
-  const bufLen = audioCtx.sampleRate * 4;
-  const buf = audioCtx.createBuffer(2, bufLen, audioCtx.sampleRate);
-  for (let ch = 0; ch < 2; ch++) {
-    const d = buf.getChannelData(ch);
-    for (let i = 0; i < bufLen; i++) {
-      // Shaped noise: mostly high frequencies for rain patter
-      d[i] = (Math.random() * 2 - 1) * 0.5;
-      // Random "drops" — occasional louder pops
-      if (Math.random() < 0.001) d[i] *= 3;
-    }
-  }
-  const src = audioCtx.createBufferSource();
-  src.buffer = buf; src.loop = true;
-
-  // Highpass to make it sound like rain, not static
-  const hp = audioCtx.createBiquadFilter();
-  hp.type = 'highpass'; hp.frequency.value = 2000; hp.Q.value = 0.3;
-
-  // Bandpass for soft patter character
-  const bp = audioCtx.createBiquadFilter();
-  bp.type = 'bandpass'; bp.frequency.value = 4500; bp.Q.value = 0.4;
-
-  const g = audioCtx.createGain();
-  g.gain.value = 0.12;
-
-  // Slow volume modulation (rain intensity ebbing)
-  const lfo = audioCtx.createOscillator();
-  lfo.type = 'sine'; lfo.frequency.value = 0.04;
-  const lfoG = audioCtx.createGain();
-  lfoG.gain.value = 0.04;
-  lfo.connect(lfoG); lfoG.connect(g.gain);
-  lfo.start();
-
-  src.connect(hp); hp.connect(bp); bp.connect(g); g.connect(masterGain);
-  src.start();
-}
-
-// ── Gentle Stream / Water ──
-function createWater() {
-  const bufLen = audioCtx.sampleRate * 6;
-  const buf = audioCtx.createBuffer(1, bufLen, audioCtx.sampleRate);
-  const d = buf.getChannelData(0);
-  // Brown noise for water body
-  let last = 0;
-  for (let i = 0; i < bufLen; i++) {
-    const white = Math.random() * 2 - 1;
-    last = (last + (0.02 * white)) / 1.02;
-    d[i] = last * 3.5;
-  }
-
-  const src = audioCtx.createBufferSource();
-  src.buffer = buf; src.loop = true;
-
-  const lp = audioCtx.createBiquadFilter();
-  lp.type = 'lowpass'; lp.frequency.value = 600; lp.Q.value = 0.5;
-
-  // Slow undulation
-  const lfo = audioCtx.createOscillator();
-  lfo.type = 'sine'; lfo.frequency.value = 0.08;
-  const lfoD = audioCtx.createGain();
-  lfoD.gain.value = 150;
-  lfo.connect(lfoD); lfoD.connect(lp.frequency);
-  lfo.start();
-
-  const g = audioCtx.createGain();
-  g.gain.value = 0.18;
-
-  src.connect(lp); lp.connect(g); g.connect(masterGain);
-  src.start();
-}
-
-// ── Soft Wind ──
-function createWind() {
-  const bufLen = audioCtx.sampleRate * 5;
-  const buf = audioCtx.createBuffer(2, bufLen, audioCtx.sampleRate);
-  for (let ch = 0; ch < 2; ch++) {
-    const d = buf.getChannelData(ch);
-    let v = 0;
-    for (let i = 0; i < bufLen; i++) {
-      v = (v + (0.01 * (Math.random() * 2 - 1))) / 1.01;
-      d[i] = v * 5;
-    }
-  }
-  const src = audioCtx.createBufferSource();
-  src.buffer = buf; src.loop = true;
-
-  const bp = audioCtx.createBiquadFilter();
-  bp.type = 'bandpass'; bp.frequency.value = 350; bp.Q.value = 0.3;
-
-  // Wind gusts — slow frequency sweep
-  const lfo = audioCtx.createOscillator();
-  lfo.type = 'sine'; lfo.frequency.value = 0.025;
-  const lfoD = audioCtx.createGain();
-  lfoD.gain.value = 200;
-  lfo.connect(lfoD); lfoD.connect(bp.frequency);
-  lfo.start();
-
-  const g = audioCtx.createGain();
-  g.gain.value = 0.1;
-
-  // Volume swell for gusts
-  const gLfo = audioCtx.createOscillator();
-  gLfo.type = 'sine'; gLfo.frequency.value = 0.03;
-  const gLfoD = audioCtx.createGain();
-  gLfoD.gain.value = 0.05;
-  gLfo.connect(gLfoD); gLfoD.connect(g.gain);
-  gLfo.start();
-
-  src.connect(bp); bp.connect(g); g.connect(masterGain);
-  src.start();
-}
-
-// ── Gentle Chimes (wind chimes / singing bowls) ──
-function playChime() {
-  if (!audioCtx || audioCtx.state === 'suspended') return;
-  const t = audioCtx.currentTime;
-  // Pentatonic/meditative notes
-  const notes = [396, 528, 639, 741, 852, 432, 324];
-  const freq = notes[Math.floor(Math.random() * notes.length)];
-
-  const osc = audioCtx.createOscillator();
-  osc.type = 'sine';
-  osc.frequency.value = freq;
-
-  // Second harmonic for richness
-  const osc2 = audioCtx.createOscillator();
-  osc2.type = 'sine';
-  osc2.frequency.value = freq * 2.01; // slight detune for shimmer
-
-  const g = audioCtx.createGain();
-  g.gain.setValueAtTime(0, t);
-  g.gain.linearRampToValueAtTime(0.025, t + 0.2);
-  g.gain.setTargetAtTime(0, t + 0.8, 1.2);
-
-  const g2 = audioCtx.createGain();
-  g2.gain.setValueAtTime(0, t);
-  g2.gain.linearRampToValueAtTime(0.008, t + 0.15);
-  g2.gain.setTargetAtTime(0, t + 0.6, 1.0);
-
-  osc.connect(g); g.connect(masterGain);
-  osc2.connect(g2); g2.connect(masterGain);
-  osc.start(t); osc.stop(t + 6);
-  osc2.start(t); osc2.stop(t + 5);
-}
-
-let chimeTmr;
-function scheduleChime() {
-  chimeTmr = setTimeout(() => {
-    playChime();
-    if (Math.random() < 0.25) setTimeout(playChime, rand(600, 1200));
-    scheduleChime();
-  }, rand(8000, 18000));
-}
-
-function setVolume(v) {
-  if (masterGain) masterGain.gain.setTargetAtTime(v, audioCtx.currentTime, 0.3);
-}
-
-
-// ═══════════════════════════════════════════════
-// HYPNOSIS SCRIPT
-// ═══════════════════════════════════════════════
-const SCRIPT = [
-  { phase: 'settling in', lines: [
-    { text: "Close your eyes, and take a slow, deep breath in.", pause: 6500 },
-    { text: "Hold it gently, and now release, letting everything go.", pause: 7000 },
-    { text: "You're safe here. There is nothing to do. Nowhere to be. Just this moment.", pause: 8000 },
-    { text: "Let the weight of the day dissolve, like mist fading in warm light.", pause: 7500 },
-    { text: "With each breath, you're sinking a little deeper into softness.", pause: 7500 },
-  ]},
-  { phase: 'releasing the body', lines: [
-    { text: "Now bring your attention to your forehead. Feel it smooth and open.", pause: 7500 },
-    { text: "Let your eyes grow heavy. So heavy. Like velvet curtains closing.", pause: 7500 },
-    { text: "Your jaw softens. Your lips part gently. All the tension melting away.", pause: 7500 },
-    { text: "Feel a warm wave of relaxation flowing down through your neck. Your shoulders dropping. Releasing.", pause: 8500 },
-    { text: "Your arms grow heavy and warm. Your hands open and soft. Fingers gently uncurling.", pause: 8500 },
-    { text: "This warmth spreads through your chest. Your belly softens. Each breath draws you deeper.", pause: 8500 },
-    { text: "Down through your hips. Your legs growing heavy. Pleasantly heavy. Sinking into the bed.", pause: 8500 },
-    { text: "All the way down to your toes. A gentle tingling, as every last bit of tension dissolves.", pause: 7500 },
-  ]},
-  { phase: 'going deeper', lines: [
-    { text: "Now imagine you're standing at the top of a beautiful staircase, made of moonlight.", pause: 8000 },
-    { text: "With each step down, you drift twice as deep into perfect relaxation.", pause: 7500 },
-    { text: "Ten. Stepping down. Deeper and deeper.", pause: 5500 },
-    { text: "Nine. The air is soft and warm around you.", pause: 5500 },
-    { text: "Eight. Every muscle letting go completely.", pause: 5500 },
-    { text: "Seven. You're floating now. Weightless and free.", pause: 5500 },
-    { text: "Six. The world above grows quiet and distant.", pause: 5500 },
-    { text: "Five. Halfway down. So deeply relaxed.", pause: 5500 },
-    { text: "Four. A beautiful peace washing over you.", pause: 5500 },
-    { text: "Three. Almost there. Drifting. Floating.", pause: 5500 },
-    { text: "Two. So deep. So calm. So safe.", pause: 6000 },
-    { text: "One. You've arrived, in the most peaceful place you've ever known.", pause: 8000 },
-  ]},
-  { phase: 'the enchanted garden', lines: [
-    { text: "You find yourself in an enchanted garden, bathed in soft violet moonlight.", pause: 8500 },
-    { text: "Fireflies drift lazily around you, their light pulsing in rhythm with your heartbeat.", pause: 8500 },
-    { text: "A gentle stream whispers nearby. Its melody ancient and familiar.", pause: 7500 },
-    { text: "The air smells of lavender and night jasmine. Every breath fills you with calm.", pause: 8500 },
-    { text: "Soft moss beneath you, cradling you, as if the earth itself is holding you.", pause: 8500 },
-    { text: "The stars above swirl slowly, like a great cosmic lullaby just for you.", pause: 8500 },
-  ]},
-  { phase: 'drifting to sleep', lines: [
-    { text: "You are so deeply relaxed now. There's nothing left to think about.", pause: 9000 },
-    { text: "My voice is becoming softer. More distant. Like a whisper on the wind.", pause: 9000 },
-    { text: "You don't need to listen anymore. Just let the sounds wash over you.", pause: 9000 },
-    { text: "Drifting. Floating. Dissolving into warmth.", pause: 9000 },
-    { text: "Sleep is here. Welcoming you. Wrapping around you like silk.", pause: 10000 },
-    { text: "Let go now. Completely. You are safe. You are loved. You are home.", pause: 10000 },
-    { text: "Sleep.", pause: 8000 },
-  ]},
+const LINES = [
+  "Close your eyes... ... and take a slow... deep breath in.",
+  "Hold it gently... ... and now... release... letting everything... go.",
+  "You\'re safe here... ... There is nothing to do... ... nowhere to be... ... just this moment.",
+  "Let the weight of the day... dissolve... ... like mist... fading in warm light.",
+  "With each breath... ... you\'re sinking... a little deeper... into softness.",
+  "Now bring your attention... to your forehead... ... Feel it... smooth... and open.",
+  "Let your eyes grow heavy... ... so heavy... ... like velvet curtains... closing.",
+  "Your jaw softens... ... your lips part gently... ... all the tension... melting away.",
+  "Feel a warm wave... of relaxation... flowing down through your neck... ... your shoulders... dropping... releasing.",
+  "Your arms grow heavy... and warm... ... your hands... open and soft... ... fingers gently... uncurling.",
+  "This warmth spreads... through your chest... ... your belly softens... ... each breath... draws you deeper.",
+  "Down through your hips... ... your legs growing heavy... ... pleasantly heavy... ... sinking into the bed.",
+  "All the way down... to your toes... ... a gentle tingling... ... as every last bit of tension... dissolves.",
+  "Now imagine... you\'re standing... at the top of a beautiful staircase... ... made of moonlight.",
+  "With each step down... ... you drift... twice as deep... into perfect relaxation.",
+  "Ten... ... stepping down... ... deeper... and deeper.",
+  "Nine... ... the air is soft... and warm... around you.",
+  "Eight... ... every muscle... letting go... completely.",
+  "Seven... ... you\'re floating now... ... weightless... and free.",
+  "Six... ... the world above... grows quiet... and distant.",
+  "Five... ... halfway down... ... so deeply... relaxed.",
+  "Four... ... a beautiful peace... washing over you.",
+  "Three... ... almost there... ... drifting... ... floating.",
+  "Two... ... so deep... ... so calm... ... so safe.",
+  "One... ... you\'ve arrived... ... in the most peaceful place... you\'ve ever known.",
+  "You find yourself... in an enchanted garden... ... bathed in soft... violet moonlight.",
+  "Fireflies drift lazily... around you... ... their light pulsing... in rhythm with your heartbeat.",
+  "A gentle stream... whispers nearby... ... its melody... ancient... and familiar.",
+  "The air smells... of lavender... and night jasmine... ... every breath... fills you with calm.",
+  "Soft moss beneath you... ... cradling you... ... as if the earth itself... is holding you.",
+  "The stars above... swirl slowly... ... like a great cosmic lullaby... just for you.",
+  "You are so deeply relaxed now... ... there\'s nothing left... to think about.",
+  "My voice is becoming softer... ... more distant... ... like a whisper... on the wind.",
+  "You don\'t need to listen... anymore... ... just let the sounds... wash over you.",
+  "Drifting... ... floating... ... dissolving... into warmth.",
+  "Sleep is here... ... welcoming you... ... wrapping around you... like silk.",
+  "Let go now... ... completely... ... you are safe... ... you are loved... ... you are home.",
+  "Sleep."
 ];
 
-// ═══════════════════════════════════════════════
-// SESSION ENGINE
-// ═══════════════════════════════════════════════
-let sessionActive = false;
-let sessionPhase = 0;
-let sessionLine = 0;
-let globalTime = 0;
-let dimLevel = 0;
-let breathActive = false;
-let breathCycle = { inhale: 4, hold: 2, exhale: 6 };
+// Phase definitions: [startLine, endLine, pauseBetweenLines(ms)]
+// 0-12: Body scan relaxation (13 lines) - 5s gaps
+// 13-14: Staircase intro (2 lines) - 6s gaps
+// 15-24: Countdown Ten to One (10 lines) - 7s gaps
+// 25-30: Enchanted garden (6 lines) - 8s gaps
+// 31-37: Fade to sleep (7 lines) - 10s gaps
+const PHASES = [
+  [0, 12, 5000],
+  [13, 14, 6000],
+  [15, 24, 7000],
+  [25, 30, 8000],
+  [31, 37, 10000]
+];
 
-function showText(text) {
-  const el = document.getElementById('guideWords');
-  el.style.opacity = '0';
-  setTimeout(() => { el.textContent = text; el.style.opacity = '1'; }, 600);
-}
-function hideText() {
-  document.getElementById('guideWords').style.opacity = '0';
-}
-
-function startSession() {
-  // Init both audio systems in user gesture
-  initAudio();
-  warmUpSpeech();
-  if (!voiceLoaded) loadVoices();
-
-  sessionActive = true;
-  sessionPhase = 0;
-  sessionLine = 0;
-  dimLevel = 0;
-  breathActive = true;
-
-  // Fade out start screen
-  const ss = document.getElementById('startScreen');
-  ss.style.opacity = '0';
-  setTimeout(() => { ss.style.pointerEvents = 'none'; }, 2000);
-
-  document.getElementById('guideText').style.opacity = '1';
-  document.getElementById('phaseLabel').style.opacity = '1';
-  document.getElementById('controls').style.opacity = '1';
-
-  // Brief loading message then start
-  const vs = document.getElementById('voiceStatus');
-  vs.textContent = 'preparing your guide...';
-  vs.style.opacity = '1';
-
-  setTimeout(() => {
-    vs.style.opacity = '0';
-    advanceScript();
-  }, 2500);
-}
-
-function advanceScript() {
-  if (!sessionActive || isPaused) return;
-  if (sessionPhase >= SCRIPT.length) { finishSession(); return; }
-
-  const phase = SCRIPT[sessionPhase];
-  document.getElementById('phaseLabel').textContent = phase.phase;
-
-  if (sessionLine >= phase.lines.length) {
-    sessionPhase++;
-    sessionLine = 0;
-    setTimeout(() => advanceScript(), 3500);
-    return;
+// ==================== AUDIO ENGINE ====================
+class AudioEngine {
+  constructor() {
+    this.ctx = null;
+    this.masterGain = null;
+    this.ambientGain = null;
+    this.voiceGain = null;
+    this.volume = 0.7;
+    this.paused = false;
+    this.currentAudio = null;
+    this._pendingResolve = null;
+    this._sourceNodes = [];
   }
 
-  const line = phase.lines[sessionLine];
-  showText(line.text);
+  init() {
+    this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+    this.masterGain = this.ctx.createGain();
+    this.masterGain.gain.value = this.volume;
+    this.masterGain.connect(this.ctx.destination);
 
-  // Calculate speech rate — gets slower as we go deeper
-  const baseRate = 0.82;
-  const slowdown = sessionPhase * 0.03;
-  const rate = Math.max(0.7, baseRate - slowdown);
+    this.ambientGain = this.ctx.createGain();
+    this.ambientGain.gain.value = 0;
+    this.ambientGain.connect(this.masterGain);
 
-  speakLine(line.text, rate, () => {
-    hideText();
-    sessionLine++;
+    this.voiceGain = this.ctx.createGain();
+    this.voiceGain.gain.value = 1.0;
+    this.voiceGain.connect(this.masterGain);
+  }
 
-    // Progressive dimming
-    const totalLines = SCRIPT.reduce((s, p) => s + p.lines.length, 0);
-    const curr = SCRIPT.slice(0, sessionPhase).reduce((s, p) => s + p.lines.length, 0) + sessionLine;
-    dimLevel = Math.min(0.85, (curr / totalLines) * 0.9);
+  createNoiseBuffer(seconds) {
+    const sr = this.ctx.sampleRate;
+    const len = sr * seconds;
+    const buf = this.ctx.createBuffer(2, len, sr);
+    for (let ch = 0; ch < 2; ch++) {
+      const data = buf.getChannelData(ch);
+      for (let i = 0; i < len; i++) data[i] = Math.random() * 2 - 1;
+    }
+    return buf;
+  }
 
-    // Slow breathing for deeper phases
-    if (sessionPhase >= 3) breathCycle = { inhale: 5, hold: 3, exhale: 7 };
-    if (sessionPhase >= 4) breathCycle = { inhale: 5, hold: 3, exhale: 8 };
+  startAmbient() {
+    const noiseBuf = this.createNoiseBuffer(4);
 
-    setTimeout(() => advanceScript(), line.pause);
-  });
-}
+    // Rain: high bandpass filtered white noise
+    const rain = this.ctx.createBufferSource();
+    rain.buffer = noiseBuf;
+    rain.loop = true;
+    const rainFilt = this.ctx.createBiquadFilter();
+    rainFilt.type = 'bandpass';
+    rainFilt.frequency.value = 8000;
+    rainFilt.Q.value = 0.5;
+    const rainG = this.ctx.createGain();
+    rainG.gain.value = 0.12;
+    rain.connect(rainFilt);
+    rainFilt.connect(rainG);
+    rainG.connect(this.ambientGain);
+    rain.start();
 
-function finishSession() {
-  hideText();
-  document.getElementById('phaseLabel').textContent = 'sleep well';
-  dimLevel = 0.92;
-  setTimeout(() => { dimLevel = 0.97; }, 15000);
-  setTimeout(() => {
-    document.getElementById('phaseLabel').style.opacity = '0';
-    document.getElementById('controls').style.opacity = '0';
-  }, 30000);
-}
+    // Stream: brown noise low-passed
+    const brownBuf = this.ctx.createBuffer(2, this.ctx.sampleRate * 4, this.ctx.sampleRate);
+    for (let ch = 0; ch < 2; ch++) {
+      const d = brownBuf.getChannelData(ch);
+      let last = 0;
+      for (let i = 0; i < d.length; i++) {
+        d[i] = (last + 0.02 * (Math.random()*2-1)) / 1.02;
+        last = d[i];
+      }
+      let mx = 0;
+      for (let i = 0; i < d.length; i++) mx = Math.max(mx, Math.abs(d[i]));
+      if (mx > 0) for (let i = 0; i < d.length; i++) d[i] /= mx;
+    }
+    const stream = this.ctx.createBufferSource();
+    stream.buffer = brownBuf;
+    stream.loop = true;
+    const streamFilt = this.ctx.createBiquadFilter();
+    streamFilt.type = 'lowpass';
+    streamFilt.frequency.value = 600;
+    const streamG = this.ctx.createGain();
+    streamG.gain.value = 0.15;
+    stream.connect(streamFilt);
+    streamFilt.connect(streamG);
+    streamG.connect(this.ambientGain);
+    stream.start();
 
-function togglePause() {
-  isPaused = !isPaused;
-  document.getElementById('pauseBtn').textContent = isPaused ? 'resume' : 'pause';
-  if (isPaused) { synth.pause(); }
-  else { synth.resume(); advanceScript(); }
-}
+    // Wind: bandpass with slow LFO swell
+    const wind = this.ctx.createBufferSource();
+    wind.buffer = noiseBuf;
+    wind.loop = true;
+    const windFilt = this.ctx.createBiquadFilter();
+    windFilt.type = 'bandpass';
+    windFilt.frequency.value = 400;
+    windFilt.Q.value = 1.5;
+    const windG = this.ctx.createGain();
+    windG.gain.value = 0.08;
+    const lfo = this.ctx.createOscillator();
+    const lfoG = this.ctx.createGain();
+    lfo.frequency.value = 0.08;
+    lfo.type = 'sine';
+    lfoG.gain.value = 0.04;
+    lfo.connect(lfoG);
+    lfoG.connect(windG.gain);
+    lfo.start();
+    wind.connect(windFilt);
+    windFilt.connect(windG);
+    windG.connect(this.ambientGain);
+    wind.start();
 
+    // Fade ambient in over 5s
+    this.ambientGain.gain.setValueAtTime(0, this.ctx.currentTime);
+    this.ambientGain.gain.linearRampToValueAtTime(1.0, this.ctx.currentTime + 5);
+  }
 
-// ═══════════════════════════════════════════════
-// VISUALS: Particles, Mandala, Background
-// ═══════════════════════════════════════════════
-const particles = [];
-function initParticles() {
-  for (let i = 0; i < 70; i++) {
-    particles.push({
-      x: rand(0,W), y: rand(0,H),
-      vx: rand(-0.12,0.12), vy: rand(-0.12,0.12),
-      size: rand(1,2.5), alpha: rand(0,1),
-      aSpd: rand(0.003,0.012), aDir: 1,
-      hue: rand(250,300), glow: rand(15,40)
+  setVolume(v) {
+    this.volume = v;
+    if (this.masterGain) this.masterGain.gain.setValueAtTime(v, this.ctx.currentTime);
+  }
+
+  playLine(lineIndex) {
+    return new Promise((resolve, reject) => {
+      const num = String(lineIndex).padStart(2, '0');
+      const audio = new Audio('audio/line_' + num + '.mp3');
+      this.currentAudio = audio;
+
+      const source = this.ctx.createMediaElementSource(audio);
+      source.connect(this.voiceGain);
+      this._sourceNodes.push(source);
+
+      audio.onended = () => { this.currentAudio = null; resolve(); };
+      audio.onerror = (e) => { this.currentAudio = null; resolve(); }; // Resolve anyway to continue
+
+      if (this.paused) {
+        this._pendingResolve = () => { audio.play().catch(() => resolve()); };
+      } else {
+        audio.play().catch(() => resolve());
+      }
     });
   }
-}
 
-function updateParticles(dt) {
-  for (const p of particles) {
-    p.x += p.vx; p.y += p.vy;
-    p.vx += rand(-0.004,0.004); p.vy += rand(-0.004,0.004);
-    p.vx *= 0.999; p.vy *= 0.999;
-    p.alpha += p.aSpd * p.aDir;
-    if (p.alpha >= 1){p.alpha=1;p.aDir=-1}
-    if (p.alpha <= 0){p.alpha=0;p.aDir=1;p.aSpd=rand(0.003,0.012)}
-    if(p.x<-5)p.x=W+5;if(p.x>W+5)p.x=-5;
-    if(p.y<-5)p.y=H+5;if(p.y>H+5)p.y=-5;
+  pause() {
+    this.paused = true;
+    if (this.currentAudio) this.currentAudio.pause();
+    if (this.ctx && this.ctx.state === 'running') this.ctx.suspend();
+  }
+
+  resume() {
+    this.paused = false;
+    if (this.ctx && this.ctx.state === 'suspended') this.ctx.resume();
+    if (this.currentAudio && this.currentAudio.paused) this.currentAudio.play();
+    if (this._pendingResolve) { this._pendingResolve(); this._pendingResolve = null; }
   }
 }
 
-function drawParticles() {
-  for (const p of particles) {
-    if (p.alpha < 0.01) continue;
-    ctx.save(); ctx.globalAlpha = p.alpha * 0.7;
-    const g = ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.glow);
-    g.addColorStop(0,`hsla(${p.hue},60%,75%,0.3)`);
-    g.addColorStop(1,'transparent');
+// ==================== VISUAL ENGINE ====================
+class VisualEngine {
+  constructor() {
+    this.bgCtx = null;
+    this.mandalaCtx = null;
+    this.particleCtx = null;
+    this.particles = [];
+    this.breathPhase = 0;
+    this.breathSpeed = 0.008;
+    this.running = false;
+    this.w = 0;
+    this.h = 0;
+  }
+
+  init() {
+    this.bgCtx = document.getElementById('bgCanvas').getContext('2d');
+    this.mandalaCtx = document.getElementById('mandalaCanvas').getContext('2d');
+    this.particleCtx = document.getElementById('particleCanvas').getContext('2d');
+    this.resize();
+    window.addEventListener('resize', () => this.resize());
+    for (let i = 0; i < 60; i++) {
+      this.particles.push({
+        x: Math.random() * this.w, y: Math.random() * this.h,
+        r: Math.random() * 2 + 1,
+        vx: (Math.random()-0.5) * 0.3, vy: (Math.random()-0.5) * 0.2 - 0.1,
+        phase: Math.random() * Math.PI * 2,
+        speed: Math.random() * 0.01 + 0.005,
+        hue: 260 + Math.random() * 40
+      });
+    }
+  }
+
+  resize() {
+    const dpr = window.devicePixelRatio || 1;
+    this.w = window.innerWidth;
+    this.h = window.innerHeight;
+    ['bgCanvas','mandalaCanvas','particleCanvas'].forEach(id => {
+      const c = document.getElementById(id);
+      c.width = this.w * dpr;
+      c.height = this.h * dpr;
+      c.getContext('2d').scale(dpr, dpr);
+    });
+  }
+
+  start() { this.running = true; this.animate(); }
+  stop() { this.running = false; }
+
+  animate() {
+    if (!this.running) return;
+    this.drawBackground();
+    this.drawMandala();
+    this.drawParticles();
+    requestAnimationFrame(() => this.animate());
+  }
+
+  drawBackground() {
+    const ctx = this.bgCtx;
+    const g = ctx.createRadialGradient(this.w/2, this.h/2, 0, this.w/2, this.h/2, this.w*0.7);
+    g.addColorStop(0, '#1a1030');
+    g.addColorStop(0.5, '#110a22');
+    g.addColorStop(1, '#0a0612');
     ctx.fillStyle = g;
-    ctx.beginPath(); ctx.arc(p.x,p.y,p.glow,0,Math.PI*2); ctx.fill();
-    ctx.beginPath(); ctx.arc(p.x,p.y,p.size,0,Math.PI*2);
-    ctx.fillStyle=`hsla(${p.hue},50%,85%,${p.alpha})`;ctx.fill();
-    ctx.restore();
+    ctx.fillRect(0, 0, this.w, this.h);
+  }
+
+  drawMandala() {
+    const ctx = this.mandalaCtx;
+    ctx.clearRect(0, 0, this.w, this.h);
+    const cx = this.w / 2, cy = this.h * 0.38;
+    this.breathPhase += this.breathSpeed;
+    const breathScale = 0.85 + 0.15 * Math.sin(this.breathPhase);
+    const baseR = Math.min(this.w, this.h) * 0.18 * breathScale;
+    const alpha = 0.15 + 0.1 * Math.sin(this.breathPhase);
+
+    // Outer glow
+    const glow = ctx.createRadialGradient(cx, cy, baseR*0.3, cx, cy, baseR*1.5);
+    glow.addColorStop(0, 'rgba(140,100,220,'+alpha*0.5+')');
+    glow.addColorStop(1, 'rgba(140,100,220,0)');
+    ctx.fillStyle = glow;
+    ctx.beginPath();
+    ctx.arc(cx, cy, baseR*1.5, 0, Math.PI*2);
+    ctx.fill();
+
+    // Rings
+    for (let r = 0; r < 5; r++) {
+      const ringR = baseR * (0.3 + r * 0.18);
+      const petals = 6 + r * 2;
+      const rot = this.breathPhase * 0.2 * (r%2===0?1:-1);
+      ctx.strokeStyle = 'rgba(180,140,255,'+(alpha*(1-r*0.15))+')';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      for (let p = 0; p < petals; p++) {
+        const a = (p/petals)*Math.PI*2 + rot;
+        const px = cx + Math.cos(a)*ringR, py = cy + Math.sin(a)*ringR;
+        p===0 ? ctx.moveTo(px,py) : ctx.lineTo(px,py);
+      }
+      ctx.closePath();
+      ctx.stroke();
+      for (let p = 0; p < petals; p++) {
+        const a = (p/petals)*Math.PI*2 + rot;
+        ctx.fillStyle = 'rgba(212,197,240,'+alpha*0.8+')';
+        ctx.beginPath();
+        ctx.arc(cx+Math.cos(a)*ringR, cy+Math.sin(a)*ringR, 1.5, 0, Math.PI*2);
+        ctx.fill();
+      }
+    }
+
+    // Center
+    ctx.fillStyle = 'rgba(180,140,255,'+alpha*0.4+')';
+    ctx.beginPath();
+    ctx.arc(cx, cy, baseR*0.15, 0, Math.PI*2);
+    ctx.fill();
+  }
+
+  drawParticles() {
+    const ctx = this.particleCtx;
+    ctx.clearRect(0, 0, this.w, this.h);
+    this.particles.forEach(p => {
+      p.phase += p.speed;
+      p.x += p.vx; p.y += p.vy;
+      if (p.x < -10) p.x = this.w+10;
+      if (p.x > this.w+10) p.x = -10;
+      if (p.y < -10) p.y = this.h+10;
+      if (p.y > this.h+10) p.y = -10;
+      const glow = 0.3 + 0.7 * Math.sin(p.phase);
+      ctx.fillStyle = 'hsla('+p.hue+',60%,75%,'+glow*0.6+')';
+      ctx.shadowColor = 'hsla('+p.hue+',70%,70%,'+glow*0.4+')';
+      ctx.shadowBlur = 15;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r*(0.8+0.4*Math.sin(p.phase)), 0, Math.PI*2);
+      ctx.fill();
+    });
+    ctx.shadowBlur = 0;
+  }
+
+  setDim(level) {
+    document.getElementById('dimOverlay').style.opacity = level;
   }
 }
 
-function drawBreathMandala(t) {
-  if (!breathActive && !sessionActive) return;
-  const bc = breathCanvas, bx = breathCtx;
-  const s = bc.width, cx = s/2, cy = s/2;
-  bx.clearRect(0,0,s,s);
-
-  const cyc = breathCycle.inhale + breathCycle.hold + breathCycle.exhale;
-  const tc = t % cyc;
-  let bs;
-  if (tc < breathCycle.inhale) bs = easeInOut(tc / breathCycle.inhale);
-  else if (tc < breathCycle.inhale + breathCycle.hold) bs = 1;
-  else bs = 1 - easeInOut((tc - breathCycle.inhale - breathCycle.hold) / breathCycle.exhale);
-
-  const baseR = s*0.12, maxR = s*0.38;
-  const radius = lerp(baseR, maxR, bs);
-
-  // Outer glow
-  bx.save(); bx.globalAlpha = 0.15 + bs*0.1;
-  const og = bx.createRadialGradient(cx,cy,radius*0.8,cx,cy,radius*1.8);
-  og.addColorStop(0,'rgba(180,140,220,0.15)'); og.addColorStop(1,'transparent');
-  bx.fillStyle=og; bx.beginPath(); bx.arc(cx,cy,radius*1.8,0,Math.PI*2); bx.fill();
-  bx.restore();
-
-  // Petals
-  for (let i=0;i<8;i++){
-    const a=(i/8)*Math.PI*2+t*0.1;
-    bx.save(); bx.translate(cx,cy); bx.rotate(a);
-    bx.globalAlpha=0.12+bs*0.08;
-    bx.beginPath(); bx.ellipse(radius*0.5,0,radius*0.45,radius*0.15,0,0,Math.PI*2);
-    bx.fillStyle=`hsla(${270+i*5},40%,70%,0.2)`; bx.fill(); bx.restore();
+// ==================== SESSION CONTROLLER ====================
+class SessionController {
+  constructor(audio, visuals) {
+    this.audio = audio;
+    this.visuals = visuals;
+    this.running = false;
+    this.paused = false;
+    this.pausePromiseResolve = null;
+    this._timer = null;
   }
 
-  // Dots ring
-  for(let i=0;i<12;i++){
-    const a=(i/12)*Math.PI*2-t*0.15;
-    const r=radius*0.85;
-    bx.beginPath();bx.arc(cx+Math.cos(a)*r,cy+Math.sin(a)*r,1.5,0,Math.PI*2);
-    bx.fillStyle=`rgba(200,180,230,${0.2+bs*0.2})`;bx.fill();
+  async start() {
+    this.running = true;
+    this.audio.init();
+    this.audio.startAmbient();
+    this.visuals.init();
+    this.visuals.start();
+
+    // Wake lock
+    try { if ('wakeLock' in navigator) await navigator.wakeLock.request('screen'); } catch(e) {}
+
+    // Preload first few audio files
+    const loadMsg = document.getElementById('loadingMsg');
+    loadMsg.textContent = 'Preparing your journey...';
+    loadMsg.classList.add('visible');
+    await this.sleep(3000);
+    loadMsg.classList.remove('visible');
+
+    // Play through all phases
+    for (let pi = 0; pi < PHASES.length && this.running; pi++) {
+      const [start, end, gap] = PHASES[pi];
+      const dimTarget = pi * 0.12;
+      this.visuals.setDim(dimTarget);
+      this.visuals.breathSpeed = Math.max(0.004, 0.008 - pi * 0.001);
+
+      for (let li = start; li <= end && this.running; li++) {
+        // Check pause
+        if (this.paused) await new Promise(r => this.pausePromiseResolve = r);
+
+        // Show subtitle
+        const sub = document.getElementById('subtitleText');
+        sub.textContent = LINES[li].replace(/\.\.\./g, '…');
+        sub.classList.add('visible');
+
+        // Play audio
+        try { await this.audio.playLine(li); } catch(e) { console.warn('Line', li, e); }
+
+        // Keep subtitle a moment then fade
+        await this.sleep(1500);
+        sub.classList.remove('visible');
+
+        // Gap between lines (longer = more relaxing)
+        await this.sleep(gap);
+      }
+    }
+
+    // Final deep dim
+    this.visuals.setDim(0.75);
+    document.getElementById('subtitleText').textContent = '';
+    document.getElementById('subtitleText').classList.remove('visible');
+    // Ambient continues playing indefinitely
   }
 
-  // Main ring
-  bx.save(); bx.globalAlpha=0.25+bs*0.15;
-  bx.beginPath();bx.arc(cx,cy,radius,0,Math.PI*2);
-  bx.strokeStyle='rgba(180,140,220,0.4)';bx.lineWidth=1;bx.stroke();
-  const ig=bx.createRadialGradient(cx,cy,0,cx,cy,radius);
-  ig.addColorStop(0,`rgba(200,170,240,${0.06+bs*0.06})`);
-  ig.addColorStop(0.7,`rgba(180,140,220,${0.02+bs*0.02})`);
-  ig.addColorStop(1,'transparent'); bx.fillStyle=ig; bx.fill();
-  bx.restore();
-
-  // Center
-  bx.beginPath();bx.arc(cx,cy,2+bs*2,0,Math.PI*2);
-  bx.fillStyle=`rgba(220,200,250,${0.3+bs*0.3})`;bx.fill();
-
-  // Label
-  let lbl='';
-  if(tc<breathCycle.inhale)lbl='breathe in';
-  else if(tc<breathCycle.inhale+breathCycle.hold)lbl='hold';
-  else lbl='breathe out';
-  bx.save();bx.globalAlpha=0.35;
-  bx.font=`${s*0.05}px 'Cormorant Garamond',serif`;
-  bx.fillStyle='#c8b8d8';bx.textAlign='center';
-  bx.fillText(lbl,cx,cy+radius+s*0.1);bx.restore();
-}
-
-function drawBackground(t) {
-  const grad=ctx.createRadialGradient(W*0.5,H*0.5,0,W*0.5,H*0.5,Math.max(W,H)*0.8);
-  grad.addColorStop(0,'#15112a');grad.addColorStop(0.5,'#0e0b1e');grad.addColorStop(1,'#07060d');
-  ctx.fillStyle=grad;ctx.fillRect(0,0,W,H);
-
-  // Nebula blobs
-  const neb=[{x:W*0.25,y:H*0.3,r:200,h:275,s:0.3},{x:W*0.7,y:H*0.6,r:180,h:260,s:-0.15},{x:W*0.5,y:H*0.8,r:250,h:290,s:0.2}];
-  for(const n of neb){
-    const nx=n.x+Math.sin(t*n.s)*20,ny=n.y+Math.cos(t*n.s*0.7)*15;
-    const ng=ctx.createRadialGradient(nx,ny,0,nx,ny,n.r);
-    ng.addColorStop(0,`hsla(${n.h},40%,25%,0.04)`);
-    ng.addColorStop(0.5,`hsla(${n.h},30%,15%,0.02)`);
-    ng.addColorStop(1,'transparent');
-    ctx.fillStyle=ng;ctx.beginPath();ctx.arc(nx,ny,n.r,0,Math.PI*2);ctx.fill();
+  sleep(ms) {
+    return new Promise(r => { this._timer = setTimeout(r, ms); });
   }
 
-  // Stars
-  ctx.save();
-  for(let i=0;i<50;i++){
-    const sx=(i*173.7)%W,sy=(i*97.3)%H;
-    const sa=0.08+Math.sin(t*0.5+i*3.7)*0.06;
-    ctx.beginPath();ctx.arc(sx,sy,0.7,0,Math.PI*2);
-    ctx.fillStyle=`rgba(200,190,220,${sa})`;ctx.fill();
-  }
-  ctx.restore();
-}
-
-// ═══════════════════════════════════════════════
-// MAIN LOOP
-// ═══════════════════════════════════════════════
-let lastFrame = 0;
-function render(ts) {
-  requestAnimationFrame(render);
-  const dt = Math.min(0.05, (ts - (lastFrame||ts)) / 1000);
-  lastFrame = ts; globalTime += dt;
-
-  drawBackground(globalTime);
-  if(!particles.length) initParticles();
-  updateParticles(dt); drawParticles();
-  drawBreathMandala(globalTime);
-
-  if(sessionActive){
-    document.getElementById('dimmer').style.opacity = dimLevel;
+  togglePause() {
+    if (this.paused) {
+      this.paused = false;
+      this.audio.resume();
+      if (this.pausePromiseResolve) { this.pausePromiseResolve(); this.pausePromiseResolve = null; }
+      document.getElementById('pauseBtn').textContent = 'Pause';
+    } else {
+      this.paused = true;
+      this.audio.pause();
+      document.getElementById('pauseBtn').textContent = 'Resume';
+    }
   }
 }
 
-// ═══════════════════════════════════════════════
-// EVENTS
-// ═══════════════════════════════════════════════
-document.getElementById('startBtn').addEventListener('click', startSession);
-document.getElementById('startBtn').addEventListener('touchend', e=>{e.preventDefault();startSession()});
-document.getElementById('pauseBtn').addEventListener('click', togglePause);
-document.getElementById('volSlider').addEventListener('input', e=>setVolume(e.target.value/100));
+// ==================== INIT ====================
+const audio = new AudioEngine();
+const visuals = new VisualEngine();
+const session = new SessionController(audio, visuals);
 
-// Wake lock
-(async()=>{try{if('wakeLock' in navigator)await navigator.wakeLock.request('screen')}catch(e){}})();
+document.getElementById('startBtn').addEventListener('click', () => {
+  document.getElementById('startScreen').classList.add('hidden');
+  document.getElementById('sessionScreen').classList.add('active');
+  setTimeout(() => session.start(), 500);
+});
 
-requestAnimationFrame(render);
+document.getElementById('pauseBtn').addEventListener('click', () => session.togglePause());
+
+document.getElementById('volSlider').addEventListener('input', (e) => {
+  audio.setVolume(e.target.value / 100);
+});
 </script>
 </body>
 </html>
